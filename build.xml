@@ -1,0 +1,125 @@
+<project name="antsimple" default="pacakge" basedir=".">
+<description>Ant Simple Sample File</description>
+<!-- set global properties for this build 
+<property file="E:\ant-practice\sampleproj\build.properties" /> -->
+
+	<property name="ant.project.name" value="antsimple"/>
+	<property name="main_class_name" value="HW"/>
+	<property name="build_dir" value="build"/>
+	<property name="test_build_dir" value="testclasses"/>
+	<property name="jarname"  value="${ant.project.name}"/>
+	<!-- set directories -->
+	<property name="src" location="source"/>
+	<property name="test" location="test"/>
+	<!--  <property name="build" location="build"/> -->
+	<property name="dist"  location="dist"/>
+	<property name="lib"  location="lib"/>
+	<property name="param1"  value="my_paramerter-1"/>
+	<property name="param2"  value="my_paramerter-2"/>
+
+	
+<path id="project.classpath" >
+
+	<!--pathelement location="${build_dir}" /-->
+
+	<pathelement location="${lib}/junit.jar" />
+
+</path>
+
+<target name="init">
+
+	<!-- Create the time stamp -->
+
+	<tstamp/>
+
+	<!-- Create directories if needed 
+
+	<mkdir dir="${src}"/>
+
+	<mkdir dir="${test}"/> -->
+
+	<mkdir dir="${build_dir}"/>
+
+	<mkdir dir="${dist}" />
+	
+	<mkdir dir="${test_build_dir}" />
+
+</target>
+
+<target name="compile" depends="init" description="compile the source " >
+
+<!-- Compile the java code from ${src} into ${build_dir} -->
+
+	<javac includeantruntime="true" debug="true" srcdir="${src}" destdir="${build_dir}" />
+
+	<!-- Copy files from ${src} into ${build_dir} 
+
+	<copy todir="${build_dir}">
+
+		<fileset dir="${src}">
+
+			<exclude name="**/*.java"/>
+
+		</fileset>
+
+	</copy-->
+
+</target>
+
+<target name="test" description="run the tests " >
+
+	<javac includeantruntime="true" debug="true" srcdir="${test}" destdir="${test_build_dir}" classpathref="project.classpath" />
+
+</target>
+
+<target name="pacakge" depends="clean, compile, test" description="generate the distribution" >
+
+<!-- Create the distribution directory -->
+
+
+<!-- Put everything in ${build_dir} into the MyProject-${DSTAMP}.jar file -->
+
+	<jar jarfile="${dist}/${jarname}-${DSTAMP}.jar" basedir="${build_dir}" />
+
+	<copy file="${dist}/${jarname}-${DSTAMP}.jar" tofile="./${jarname}_artifact.jar" overwrite="true"/>
+
+</target>
+
+<target name="clean" description="clean up" >
+
+	<!-- Delete the ${build_dir} directory-->
+
+	<delete dir="${build_dir}"/>
+	<delete dir="${dist}"/>
+	<delete file="antsimple_artifact.jar"/>
+
+</target>
+
+<target name="mytarget1"  >
+
+	<!-- Delete the ${build_dir} directory-->
+
+	<echo>target1: Before antcall param1 value is: ${param1}</echo>
+	
+	<antcall target="mytarget2">
+		<param name="param2" value="subbu"/>
+	</antcall>
+	
+	<echo>target1: After antcall param1 value is: ${param1}</echo>
+
+</target>
+
+<target name="mytarget2" >
+
+	<!-- Delete the ${build_dir} directory-->
+
+	<echo>target2: param2 value is: ${param2}</echo>
+
+</target>
+
+</project>
+
+
+
+
+
